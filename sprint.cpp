@@ -36,7 +36,7 @@ Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified();
 #define DEVICE_ID "Sensor_1"
 
             /* Define some global variables */
-String deviceLocation = "Naivas S/Mkt (Nyr)";
+String deviceLocation = "Naivas(Nyr)";
 String databasePath = " "; // empty variable
 String fUID = " ";
 
@@ -127,7 +127,7 @@ void streamToFirebase(float x, float y, float z){
 
                     /* GENERAL FUNCTIONS */
 void setup(){
-    Serial.begin(115200);
+    Serial.begin(9600);
     Wifi_Init();
     Firebase_init();
     // initialize the adxl345 library
@@ -138,8 +138,6 @@ void setup(){
 
     accel.setDataRate(ADXL345_DATARATE_800_HZ);
     accel.setRange(ADXL345_RANGE_16_G);
-    
-    // Skipped the accelerometer json data (part)
 }
 
 void loop(){
@@ -174,14 +172,22 @@ void loop(){
     // stream the filtred data to Firebase ********* changes can be made incase we wanna see unfiltred stream
     if (elapsedMillis > update_interval && isAuthenticated){
         // the above if function may introduce some sort of delay to prog execution
+        // streamToFirebase(
+        //     filtered_x,
+        //     filtered_y,
+        //     filtered_z
+        // );
+
         streamToFirebase(
-            filtered_x,
-            filtered_y,
-            filtered_z
+            x_buff[0],
+            y_buff[0],
+            z_buff[0]
         );
+
+
         elapsedMillis = 0;
         count++;
     }
-    delay(1000);
+    // delay(1000);
     elapsedMillis++;
 }
